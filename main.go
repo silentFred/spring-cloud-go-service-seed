@@ -17,17 +17,17 @@ func main() {
 		"http://localhost:8761/eureka",
 	}
 
-	e := eureka.New(appName, applicationPort, eurekaHosts)
+	eurekaClient := eureka.New(appName, applicationPort, eurekaHosts)
 
-	f := flights.New(e)
+	flightsClient := flights.New(eurekaClient)
 
 	app := gin.Default()
 
 	app.GET("/actuator/info", func(context *gin.Context) {
-		context.JSONP(200, string(f.GetFlight(1)))
+		context.JSONP(200, string(flightsClient.GetFlight(1)))
 	})
 
-	e.RegisterService()
+	eurekaClient.RegisterService()
+
 	app.Run(fmt.Sprintf(":%d", applicationPort))
 }
-
