@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"go-eureka/clients/eureka"
-	"go-eureka/clients/flights"
-
 	"github.com/gin-gonic/gin"
+	"go-eureka/pkg/clients/eureka"
+	"go-eureka/pkg/clients/flights"
 )
 
 func main() {
