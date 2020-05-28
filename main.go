@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"go-eureka/clients/eureka"
+	"go-eureka/clients/flights"
 
 	"github.com/gin-gonic/gin"
-	"go-eureka/eureka"
-	"go-eureka/flights"
 )
 
 func main() {
+
 	appName := "go-fish-api"
 
 	applicationPort := 9999
@@ -25,6 +26,10 @@ func main() {
 
 	app.GET("/actuator/info", func(context *gin.Context) {
 		context.JSONP(200, string(flightsClient.GetFlight(1)))
+	})
+
+	app.GET("/actuator/health", func(context *gin.Context) {
+		context.JSONP(200, "OK")
 	})
 
 	eurekaClient.RegisterService()

@@ -2,23 +2,29 @@ package flights
 
 import (
 	"fmt"
-	"go-eureka/eureka"
+	eureka2 "go-eureka/clients/eureka"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
-type Flight struct {
-	eureka eureka.Eureka
+var netClient = &http.Client{
+	Timeout: time.Second * 10,
 }
 
-func New(e eureka.Eureka) Flight {
+type Flight struct {
+	eureka eureka2.Eureka
+}
+
+func New(e eureka2.Eureka) Flight {
 	return Flight{eureka: e}
 }
 
 func (f Flight) GetFlight(flightId int) []byte {
 	serviceName := "FLIGHT-SERVICE"
 	app := f.eureka.GetRandomServiceInstance(serviceName)
-	rawResponse, _ := http.Get(fmt.Sprintf("%sflights/%d", app.HomePageUrl, flightId))
+
+	rawResponse, _ := netClient.Get(fmt.Sprintf("%sflights/%d", app.HomePageUrl, flightId))
 	response, _ := ioutil.ReadAll(rawResponse.Body)
 	defer rawResponse.Body.Close()
 	return response

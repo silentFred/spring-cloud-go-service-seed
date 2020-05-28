@@ -33,27 +33,28 @@ func (e Eureka) RegisterService() {
 		applicationUri := fmt.Sprintf("http://%s:%d", hostname, e.port)
 		ip := getIp()
 
-		serviceTTL := 30
+		serviceTTL := 30 // todo configure
 		instance := eureka.NewInstanceInfo(hostname, e.appName, ip, e.port, uint(serviceTTL), false)
 
-		//instance.HealthCheckUrl = ""
-		//instance.HomePageUrl = ""
 		instance.StatusPageUrl = applicationUri + "/actuator/info"
+		instance.HealthCheckUrl = applicationUri + "/actuator/health"
 
 		instance.Metadata = &eureka.MetaData{
 			Map: make(map[string]string),
 		}
-		instance.Metadata.Map["foo"] = "bar" //add metadata for example
 
-		e.client.RegisterInstance(e.appName, instance) // Register new instance in your eureka(s)
+		instance.Metadata.Map["service-description"] = "GoLang service running on Spring Cloud"
 
-		for ; ; {
+		e.client.RegisterInstance(e.appName, instance)
+
+		for {
 			e.client.SendHeartbeat(instance.App, instance.HostName)
 			time.Sleep(time.Second * time.Duration(serviceTTL-5))
 		}
 	}()
 }
 
+// TODO implement local service instance cache that updates every x seconds
 func (e Eureka) GetRandomServiceInstance(s string) eureka.InstanceInfo {
 	flightServices, _ := e.client.GetApplication(s)
 	apps := flightServices.Instances
