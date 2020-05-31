@@ -13,28 +13,31 @@ func main() {
 
 	appName := "go-fish-api"
 
-	applicationPort := 9999
+	config := senv.NewConfig(
+		"localhost",
+		"9000",
+		appName,
+		[]string{"test"},
+		"master")
 
-	eurekaHosts := []string{
-		"http://localhost:8761/eureka",
-	}
-
-	profiles := []string{
-		"test",
-	}
-	config := senv.NewConfig("localhost", "9000", appName, profiles, "master")
 	config.Fetch(true, true)
 	config.Process()
+
+	applicationPort, _ := strconv.Atoi(config.Properties["server.port"])
+
+	eurekaHosts := []string{
+		config.Properties["eureka.client.service-url.default-zone"],
+	}
 
 	eurekaClient := eureka.New(appName, applicationPort, eurekaHosts)
 	flightsClient := flights.New(eurekaClient)
 	app := gin.Default()
 
 	app.GET("/flights/:id", func(context *gin.Context) {
-		fligthId := context.Params.ByName("id")
-		id, _ := strconv.Atoi(fligthId)
-		flight, _ := flightsClient.GetFlight(id)
-		context.JSON(200, flight)
+		flightIdParameter := context.Params.ByName("id")
+		flightId, _ := strconv.Atoi(flightIdParameter)
+		flightResponse, _ := flightsClient.GetFlight(flightId)
+		context.JSON(200, flightResponse)
 	})
 
 	app.GET("/actuator/env", func(context *gin.Context) {
