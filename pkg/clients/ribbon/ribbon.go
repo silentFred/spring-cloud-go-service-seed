@@ -27,7 +27,8 @@ func (n NetClient) Get(u string) (resp *http.Response, err error) {
 	b, _ := url.Parse(u)
 
 	serviceName := b.Host
+	path := b.Path
 	app := n.eureka.GetRandomServiceInstance(serviceName)
 
-	return n.httpClient.Get(strings.Replace(u, serviceName, app.HomePageUrl, 1))
+	return n.httpClient.Get(strings.TrimRight(app.HomePageUrl, "/") + path)
 }

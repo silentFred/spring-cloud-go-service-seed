@@ -1,0 +1,31 @@
+# Create a new flight on Spring Cloud Flights project
+POST http://localhost:8201/flights/
+Content-Type: application/json
+
+{
+  "id": "1",
+  "flightDate": "2019-01-01",
+  "origin": "JOHANNESBURG",
+  "destination": "CAPE_TOWN",
+  "seatsAvailable": "20",
+  "price": 599.99
+}
+
+###
+
+# Actuator info
+GET http://localhost:9999/actuator/info
+Accept: application/json
+
+###
+
+# Actuator info
+GET http://localhost:9999/actuator/health
+Accept: application/json
+
+###
+# Fetch the new flight and demonstrate client-side load balancing from Go FIsh Service to *Flight Service* to *Cost Service*
+GET http://localhost:9999/flights/1
+Accept: application/json
+
+###

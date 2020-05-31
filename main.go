@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-eureka/pkg/clients/eureka"
 	"go-eureka/pkg/clients/flights"
+	"strconv"
 )
 
 func main() {
@@ -23,8 +24,15 @@ func main() {
 
 	app := gin.Default()
 
+	app.GET("/flights/:id", func(context *gin.Context) {
+		fligthId := context.Params.ByName("id")
+		id, _ := strconv.Atoi(fligthId)
+		flight, _ := flightsClient.GetFlight(id)
+		context.JSON(200, flight)
+	})
+
 	app.GET("/actuator/info", func(context *gin.Context) {
-		context.JSONP(200, string(flightsClient.GetFlight(1)))
+		context.JSONP(200, "Some info here")
 	})
 
 	app.GET("/actuator/health", func(context *gin.Context) {
