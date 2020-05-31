@@ -3,8 +3,8 @@ package flights
 import (
 	"encoding/json"
 	"fmt"
-	eureka2 "go-eureka/pkg/clients/eureka"
-	"go-eureka/pkg/clients/ribbon"
+	eureka2 "github.com/silentFred/spring-cloud-go-service-seed/pkg/clients/eureka"
+	"github.com/silentFred/spring-cloud-go-service-seed/pkg/clients/ribbon"
 	"io/ioutil"
 	"net/http"
 )

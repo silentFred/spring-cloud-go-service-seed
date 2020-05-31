@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jamowei/senv"
-	"go-eureka/pkg/clients/eureka"
-	"go-eureka/pkg/clients/flights"
+	"github.com/silentFred/spring-cloud-go-service-seed/pkg/clients/eureka"
+	"github.com/silentFred/spring-cloud-go-service-seed/pkg/clients/flights"
 	"strconv"
 )
 

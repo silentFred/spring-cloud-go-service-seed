@@ -1,7 +1,7 @@
 package ribbon
 
 import (
-	eureka2 "go-eureka/pkg/clients/eureka"
+	eureka2 "github.com/silentFred/spring-cloud-go-service-seed/pkg/clients/eureka"
 	"net/http"
 	"net/url"
 	"strings"

@@ -1,4 +1,4 @@
-module go-eureka
+module github.com/silentFred/spring-cloud-go-service-seed
 
 go 1.14
 
