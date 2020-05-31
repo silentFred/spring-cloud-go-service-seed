@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jamowei/senv"
 	"go-eureka/pkg/clients/eureka"
 	"go-eureka/pkg/clients/flights"
 	"strconv"
@@ -18,10 +19,15 @@ func main() {
 		"http://localhost:8761/eureka",
 	}
 
+	profiles := []string{
+		"test",
+	}
+	config := senv.NewConfig("localhost", "9000", appName, profiles, "master")
+	config.Fetch(true, true)
+	config.Process()
+
 	eurekaClient := eureka.New(appName, applicationPort, eurekaHosts)
-
 	flightsClient := flights.New(eurekaClient)
-
 	app := gin.Default()
 
 	app.GET("/flights/:id", func(context *gin.Context) {
@@ -29,6 +35,10 @@ func main() {
 		id, _ := strconv.Atoi(fligthId)
 		flight, _ := flightsClient.GetFlight(id)
 		context.JSON(200, flight)
+	})
+
+	app.GET("/actuator/env", func(context *gin.Context) {
+		context.JSONP(200, config.Properties)
 	})
 
 	app.GET("/actuator/info", func(context *gin.Context) {

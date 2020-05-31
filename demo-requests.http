@@ -24,6 +24,12 @@ GET http://localhost:9999/actuator/health
 Accept: application/json
 
 ###
+
+# Actuator environment
+GET http://localhost:9999/actuator/env
+Accept: application/json
+
+###
 # Fetch the new flight and demonstrate client-side load balancing from Go FIsh Service to *Flight Service* to *Cost Service*
 GET http://localhost:9999/flights/1
 Accept: application/json
